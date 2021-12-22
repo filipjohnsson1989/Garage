@@ -12,6 +12,13 @@ public class GarageHandler
             throw new ArgumentException();
 
         garage = new Garage<IVehicle>(capacity);
+
+        if (vehicles is not null)
+            foreach (var vehicle in vehicles)
+            {
+                this.AddVehicle(vehicle);
+            }
+
     }
     public bool AddVehicle(IVehicle vehicle) => garage.Add(vehicle);
 

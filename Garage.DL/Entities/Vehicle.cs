@@ -1,6 +1,8 @@
-﻿namespace Garage.DL.Entities;
+﻿using Garage.Common;
 
-public abstract class Vehicle
+namespace Garage.DL.Entities;
+
+public abstract class Vehicle: IVehicle
 {
     public Guid RegisterNumber { get; init; }
     public string Color { get; init; }

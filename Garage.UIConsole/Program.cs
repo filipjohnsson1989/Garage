@@ -5,9 +5,10 @@ Console.WriteLine("Hej, Garage!");
 
 GarageManager garageManager = new();
 
-foreach (var vehicle in garageManager.ListOfVehicles())
+var vehicles = garageManager.ListOfVehicles();
+foreach (var vehicle in vehicles)
 {
-    Console.WriteLine(vehicle);
+    Console.WriteLine(vehicle.Stats());
 }
 
-
+Console.ReadLine();
