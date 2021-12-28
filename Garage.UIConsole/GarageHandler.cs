@@ -1,7 +1,6 @@
-﻿
-using Garage.Common;
+﻿using Garage.UIConsole.Entities;
 
-namespace Garage.BL;
+namespace Garage.UIConsole;
 
 public class GarageHandler
 {
@@ -16,10 +15,12 @@ public class GarageHandler
         if (vehicles is not null)
             foreach (var vehicle in vehicles)
             {
-                this.AddVehicle(vehicle);
+                AddVehicle(vehicle);
             }
 
     }
+
+
     public bool AddVehicle(IVehicle vehicle) => garage.Add(vehicle);
 
     public bool RemoveVehicle(IVehicle vehicle) => garage.Remove(vehicle);

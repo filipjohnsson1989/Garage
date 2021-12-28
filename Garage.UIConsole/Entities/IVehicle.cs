@@ -1,11 +1,10 @@
-﻿
-namespace Garage.Common
+﻿namespace Garage.UIConsole.Entities
 {
     public interface IVehicle
     {
         string Color { get; init; }
         uint NumberOfWheels { get; init; }
-        Guid RegisterNumber { get; init; }
+        string RegisterNumber { get; init; }
 
         string Stats();
     }

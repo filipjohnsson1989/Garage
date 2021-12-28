@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Garage.Common;
+namespace Garage.UIConsole.Entities;
 
 public class Garage<T> : IGarage<T>
     where T : IVehicle

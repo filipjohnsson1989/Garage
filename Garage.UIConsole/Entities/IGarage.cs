@@ -1,4 +1,4 @@
-﻿namespace Garage.Common;
+﻿namespace Garage.UIConsole.Entities;
 
 public interface IGarage<T> : IEnumerable<T>
     where T : IVehicle
