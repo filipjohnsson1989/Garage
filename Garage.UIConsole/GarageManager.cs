@@ -1,4 +1,5 @@
 ﻿using Garage.Common;
+using Garage.UIConsole.Entities;
 using Garage.UIConsole.UserInterface;
 
 namespace Garage.UIConsole;
@@ -13,23 +14,6 @@ public class GarageManager
     {
         consoleUI = new ConsoleUI();
 
-    }
-
-    private void ParkVehicle(string registerNumber,
-                           string color,
-                           uint numberOfWheels,
-                           VehicleType vehicleType,
-                           uint? wingSpan,
-                           uint? hullType,
-                           uint? busType,
-                           bool? hasOneLessWheelSuspension,
-                           uint? topBoxCapacity)
-    {
-        ArgumentNullException.ThrowIfNull(garageHandler);
-
-        var result = garageHandler.CreateVehicle(registerNumber, color, numberOfWheels, vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
-
-        garageHandler.AddVehicle(result);
     }
 
     public void Run()
@@ -79,8 +63,12 @@ public class GarageManager
 
     }
 
-
     void CreateGarage()
+    {
+        CreateGarage(vehicles: null);
+    }
+
+    void CreateGarage(IEnumerable<IVehicle>? vehicles = null)
     {
         consoleUI.Clear();
         consoleUI.AddMessage("Instansieringen av ett nytt garage");
@@ -94,9 +82,14 @@ public class GarageManager
         if (string.IsNullOrEmpty(input) || !uint.TryParse(input, out uint capacity))
             throw new ArgumentException();
 
-        garageHandler = new(capacity);
+        garageHandler = new(capacity, vehicles);
 
-        consoleUI.AddMessage($"Garaget har {capacity} kapacitet kvar");
+        var remaindeCapacity = capacity - (vehicles is null ? 0 : vehicles.Count());
+
+        consoleUI.AddMessage($"Garaget har {remaindeCapacity} kapacitet kvar");
+
+        consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
+        Console.ReadKey();
 
     }
 
@@ -104,7 +97,9 @@ public class GarageManager
     {
         consoleUI.Clear();
         consoleUI.AddMessage("Instansieringen av ett nytt garage med ett antal fordon");
-        throw new NotImplementedException();
+
+        var vehicles = this.GetVehicles();
+        CreateGarage(vehicles);
     }
 
     void ListOfVehicles()
@@ -132,11 +127,64 @@ public class GarageManager
 
     void AddVehicle()
     {
+        ArgumentNullException.ThrowIfNull(garageHandler);
+
         consoleUI.Clear();
-        consoleUI.AddMessage("Lägga till fordon garaget");
+        consoleUI.AddMessage("Lägga till fordon");
+
+        var vehicle = this.GetVehicle();
+        ArgumentNullException.ThrowIfNull(vehicle);
+
+        garageHandler.AddVehicle(vehicle);
+
+        consoleUI.AddMessage("Fordonet läggs till garaget");
+
+        consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
+        Console.ReadKey();
+    }
+
+    IEnumerable<IVehicle> GetVehicles()
+    {
+        var result = new List<IVehicle>();
         do
         {
-            consoleUI.AddMessage("Vilket fordon vill du läga till?"
+            var vehicle = this.GetVehicle();
+
+            if (vehicle is null)
+                break;
+
+            result.Add(vehicle);
+            //yield return vehicle;
+
+        } while (true);
+
+        return result;
+    }
+
+    IVehicle? GetVehicle()
+    {
+        var vehicle = AskForVehicle();
+
+        if (vehicle is null)
+            return null;
+
+        var result = GarageHandler.CreateVehicle(registerNumber: vehicle.Value.Item1,
+                       color: vehicle.Value.Item2,
+                       numberOfWheels: vehicle.Value.Item3,
+                       vehicleType: vehicle.Value.Item4,
+                       wingSpan: vehicle.Value.Item5,
+                       hullType: vehicle.Value.Item6,
+                       busType: vehicle.Value.Item7,
+                       hasOneLessWheelSuspension: vehicle.Value.Item8,
+                       topBoxCapacity: vehicle.Value.Item9);
+
+        return result;
+
+    }
+
+    (string, string, uint, VehicleType, uint?, uint?, uint?, bool?, uint?)? AskForVehicle()
+    {
+        consoleUI.AddMessage("Vilket fordon vill du läga till?"
                     + "\n1.Airplain"
                     + "\n2.Boat"
                     + "\n3.Bus"
@@ -144,47 +192,46 @@ public class GarageManager
                     + "\n5.MotorCycle"
                     + "\nTomt att gå tillbaka till huvudmeny");
 
-            string? input = Console.ReadLine();
-            ArgumentNullException.ThrowIfNull(input);
+        string? input = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(input);
 
-            if (string.IsNullOrEmpty(input))
-                break;
+        if (string.IsNullOrEmpty(input))
+            return null;
 
-            // ToDo: out of range VehicleType
-            var vehicleType = (VehicleType)(int.Parse(input) - 1);
+        // ToDo: out of range VehicleType
+        var vehicleType = (VehicleType)(int.Parse(input) - 1);
 
-            consoleUI.AddMessage("Registreringsnummer?");
-            string? registerNumber = Console.ReadLine();
-            ArgumentNullException.ThrowIfNull(registerNumber);
+        consoleUI.AddMessage("Registreringsnummer?");
+        string? registerNumber = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(registerNumber);
 
-            consoleUI.AddMessage("Färg?");
-            string? color = Console.ReadLine();
-            ArgumentNullException.ThrowIfNull(color);
+        consoleUI.AddMessage("Färg?");
+        string? color = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(color);
 
-            consoleUI.AddMessage("Antal hjul?");
-            string? numberOfWheels = Console.ReadLine();
-            ArgumentNullException.ThrowIfNull(numberOfWheels);
-
-
-            uint? wingSpan = null;
-            uint? hullType = null;
-            uint? busType = null;
-            bool? hasOneLessWheelSuspension = null;
-            uint? topBoxCapacity = null;
-            // ToDo: ArgumentException
-            if (vehicleType == VehicleType.Airplain) { consoleUI.AddMessage("ving spann?"); wingSpan = uint.Parse(Console.ReadLine()!); }
-            else if (vehicleType == VehicleType.Boat) { consoleUI.AddMessage("Skrov typ?"); hullType = uint.Parse(Console.ReadLine()!); }
-            else if (vehicleType == VehicleType.Bus) { consoleUI.AddMessage("Buss typ?"); busType = uint.Parse(Console.ReadLine()!); }
-            else if (vehicleType == VehicleType.Car) { consoleUI.AddMessage("Har en hjulupphängning mindre?"); hasOneLessWheelSuspension = bool.Parse(Console.ReadLine()!); }
-            else if (vehicleType == VehicleType.Motorcycle) { consoleUI.AddMessage("Toppboxens kapacitet?"); topBoxCapacity = uint.Parse(Console.ReadLine()!); }
-            else throw new NotImplementedException();
-
-            this.ParkVehicle(registerNumber, color, uint.Parse(numberOfWheels), vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
+        consoleUI.AddMessage("Antal hjul?");
+        string? numberOfWheels = Console.ReadLine();
+        ArgumentNullException.ThrowIfNull(numberOfWheels);
 
 
-            consoleUI.AddMessage("Fordonet läggs till garaget");
+        uint? wingSpan = null;
+        uint? hullType = null;
+        uint? busType = null;
+        bool? hasOneLessWheelSuspension = null;
+        uint? topBoxCapacity = null;
+        // ToDo: ArgumentException
+        if (vehicleType == VehicleType.Airplain) { consoleUI.AddMessage("ving spann?"); wingSpan = uint.Parse(Console.ReadLine()!); }
+        else if (vehicleType == VehicleType.Boat) { consoleUI.AddMessage("Skrov typ?"); hullType = uint.Parse(Console.ReadLine()!); }
+        else if (vehicleType == VehicleType.Bus) { consoleUI.AddMessage("Buss typ?"); busType = uint.Parse(Console.ReadLine()!); }
+        else if (vehicleType == VehicleType.Car) { consoleUI.AddMessage("Har en hjulupphängning mindre?"); hasOneLessWheelSuspension = bool.Parse(Console.ReadLine()!); }
+        else if (vehicleType == VehicleType.Motorcycle) { consoleUI.AddMessage("Toppboxens kapacitet?"); topBoxCapacity = uint.Parse(Console.ReadLine()!); }
+        else throw new NotImplementedException();
 
-        } while (true);
+        // ToDo: fix converting
+        (string registerNumber, string color, uint, VehicleType vehicleType, uint? wingSpan, uint? hullType, uint? busType, bool? hasOneLessWheelSuspension, uint? topBoxCapacity) result =
+            (registerNumber, color, uint.Parse(numberOfWheels), vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
+
+        return result;
     }
 
     void RemoveVehicle()
@@ -225,7 +272,7 @@ public class GarageManager
         var vehicle = garageHandler.GetVehicle(registerNumber);
         ArgumentNullException.ThrowIfNull(vehicle);
 
-
+        consoleUI.AddMessage(vehicle.Stats());
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
         Console.ReadKey();
     }
@@ -243,14 +290,6 @@ public class GarageManager
         consoleUI.AddMessage("Stängs");
         Environment.Exit(0);
     }
-
-    void CreateGarage(uint capacity)
-    {
-        garageHandler = new(capacity);
-    }
-
-
-
 
 
 }

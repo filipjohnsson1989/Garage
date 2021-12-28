@@ -21,22 +21,22 @@ public class GarageHandler
 
     }
 
-    private IVehicle CreateAirplane(dynamic vehicle,
+    private static IVehicle CreateAirplane(dynamic vehicle,
                                    uint wingSpan) => new Airplane(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, wingSpan);
 
-    private IVehicle CreateBoat(dynamic vehicle,
+    private static IVehicle CreateBoat(dynamic vehicle,
                                uint hullType) => new Boat(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, hullType);
 
-    private IVehicle CreateBus(dynamic vehicle,
+    private static IVehicle CreateBus(dynamic vehicle,
                               uint busType) => new Bus(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, busType);
 
-    private IVehicle CreateCar(dynamic vehicle,
+    private static IVehicle CreateCar(dynamic vehicle,
                               bool hasOneLessWheelSuspension) => new Car(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, hasOneLessWheelSuspension);
 
-    private IVehicle CreateMotorcycle(dynamic vehicle,
+    private static IVehicle CreateMotorcycle(dynamic vehicle,
                                      uint topBoxCapacity) => new Motorcycle(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, topBoxCapacity);
 
-    private IVehicle CreateVehicle(object vehicle,
+    private static IVehicle CreateVehicle(object vehicle,
                                VehicleType vehicleType,
                                uint? wingSpan = null,
                                uint? hullType = null,
@@ -56,7 +56,7 @@ public class GarageHandler
 
         return result;
     }
-    public IVehicle CreateVehicle(string registerNumber,
+    public static IVehicle CreateVehicle(string registerNumber,
                                string color,
                                uint numberOfWheels,
                                VehicleType vehicleType,
@@ -72,9 +72,9 @@ public class GarageHandler
         vehicle.Color = color;
         vehicle.NumberOfWheels = numberOfWheels;
 
-        
 
-        return this.CreateVehicle(vehicle, vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
+
+        return CreateVehicle(vehicle, vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
     }
 
     public bool AddVehicle(IVehicle vehicle) => garage.Add(vehicle);
@@ -85,9 +85,9 @@ public class GarageHandler
 
     public IVehicle? GetVehicle(string registerNumber) => garage.FirstOrDefault(x => x is not null && x.RegisterNumber == registerNumber!);
 
-    
 
 
-    
+
+
 
 }

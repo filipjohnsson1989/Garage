@@ -36,6 +36,7 @@ public class Garage<T> : IGarage<T>
         if (vehicleIndex == -1) return false;
 
         Array.Clear(vehicles, vehicleIndex, 1);
+        NumberOfVehicles--;
         return true;
     }
 
