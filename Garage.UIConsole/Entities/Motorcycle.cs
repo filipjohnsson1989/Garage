@@ -8,4 +8,5 @@ public class Motorcycle : Vehicle
                     string color,
                     uint numberOfWheels,
                     uint topBoxCapacity) : base(registerNumber, color, topBoxCapacity) => TopBoxCapacity = topBoxCapacity;
+    public override string Stats() => $"{base.Stats()}Toppboxens kapacitet:{TopBoxCapacity}";
 }

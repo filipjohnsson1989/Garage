@@ -13,5 +13,5 @@ public abstract class Vehicle : IVehicle
         NumberOfWheels = numberOfWheels;
     }
 
-    public virtual string Stats() => $"Register Number:{RegisterNumber} Color:{Color} Vehicle:{GetType().Name}";
+    public virtual string Stats() => $"Vehicle:{GetType().Name}\n\rRegistreringsnummer:{RegisterNumber}\n\rFärg:{Color}\n\rAntal hjul:{NumberOfWheels}\n\r";
 }

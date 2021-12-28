@@ -9,5 +9,5 @@ public class Airplane : Vehicle
                     uint numberOfWheels,
                     uint wingSpan) : base(registerNumber, color, numberOfWheels) => WingSpan = wingSpan;
 
-    public override string Stats() => $"{base.Stats()} Wing span:{WingSpan}";
+    public override string Stats() => $"{base.Stats()}Ving spann:{WingSpan}";
 }

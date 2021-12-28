@@ -8,4 +8,6 @@ public class Boat : Vehicle
                     string color,
                     uint numberOfWheels,
                     uint hullType) : base(registerNumber, color, hullType) => HullType = hullType;
+
+    public override string Stats() => $"{base.Stats()}Skrov typ:{HullType}";
 }

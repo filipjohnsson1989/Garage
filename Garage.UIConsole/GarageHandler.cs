@@ -25,5 +25,8 @@ public class GarageHandler
 
     public bool RemoveVehicle(IVehicle vehicle) => garage.Remove(vehicle);
 
-    public IEnumerable<IVehicle> GetVehicles() => garage;
+    public IEnumerable<IVehicle> GetVehicles() => garage.Where(x => x is not null);
+
+    public IVehicle? GetVehicle(string registerNumber) => garage.FirstOrDefault(x => x is not null && x.RegisterNumber == registerNumber!);
+
 }

@@ -93,8 +93,10 @@ namespace Garage.UIConsole
             var vehicles = garageManager.ListOfVehicles();
             foreach (var vehicle in vehicles)
             {
-                vehicle.Stats();
+                UI.AddMessage(vehicle.Stats() + "\n\r");
             }
+            UI.AddMessage("Något att gå tillbaka till huvudmeny");
+            Console.ReadKey();
         }
 
         static void ListOfVehicleTypes()
@@ -116,7 +118,7 @@ namespace Garage.UIConsole
                         + "\n3.Bus"
                         + "\n4.Car"
                         + "\n5.MotorCycle"
-                        + "\nTomt att gå till backa till huvudmeny");
+                        + "\nTomt att gå tillbaka till huvudmeny");
 
                 string? input = Console.ReadLine();
                 ArgumentNullException.ThrowIfNull(input);
@@ -124,19 +126,12 @@ namespace Garage.UIConsole
                 if (string.IsNullOrEmpty(input))
                     break;
 
-                var vehicleType = input switch
-                {
-                    "1" => VehicleType.Airplain,
-                    "2" => VehicleType.Boat,
-                    "3" => VehicleType.Bus,
-                    "4" => VehicleType.Car,
-                    "5" => VehicleType.Motorcycle,
-                    _ => throw new NotImplementedException(),
-                };
+                // ToDo: out of range VehicleType
+                var vehicleType = (VehicleType)(int.Parse(input) - 1);
 
-                UI.AddMessage("RegisterNumber?");
+                UI.AddMessage("Registreringsnummer?");
                 string? registerNumber = Console.ReadLine();
-                ArgumentNullException.ThrowIfNull(input);
+                ArgumentNullException.ThrowIfNull(registerNumber);
 
                 UI.AddMessage("Färg?");
                 string? color = Console.ReadLine();
@@ -150,7 +145,7 @@ namespace Garage.UIConsole
 
                 vehicle.RegisterNumber = registerNumber;
                 vehicle.Color = color;
-                vehicle.NumberOfWheels = numberOfWheels;
+                vehicle.NumberOfWheels = uint.Parse(numberOfWheels);
 
 
                 uint? wingSpan = null;
@@ -158,35 +153,55 @@ namespace Garage.UIConsole
                 uint? busType = null;
                 bool? hasOneLessWheelSuspension = null;
                 uint? topBoxCapacity = null;
+                // ToDo: ArgumentException
+                if (vehicleType == VehicleType.Airplain) { UI.AddMessage("ving spann?"); wingSpan = uint.Parse(Console.ReadLine()!); }
+                else if (vehicleType == VehicleType.Boat) { UI.AddMessage("Skrov typ?"); hullType = uint.Parse(Console.ReadLine()!); }
+                else if (vehicleType == VehicleType.Bus) { UI.AddMessage("Buss typ?"); busType = uint.Parse(Console.ReadLine()!); }
+                else if (vehicleType == VehicleType.Car) { UI.AddMessage("Har en hjulupphängning mindre?"); hasOneLessWheelSuspension = bool.Parse(Console.ReadLine()!); }
+                else if (vehicleType == VehicleType.Motorcycle) { UI.AddMessage("Toppboxens kapacitet?"); topBoxCapacity = uint.Parse(Console.ReadLine()!); }
+                else throw new NotImplementedException();
 
-                //var result = vehicleType switch
-                //{
-                //    VehicleType.Airplain => CreateAirplane(vehicle, wingSpan!.Value),
-                //    VehicleType.Boat => CreateBoat(vehicle, hullType!.Value),
-                //    VehicleType.Bus => CreateBus(vehicle, busType!.Value),
-                //    VehicleType.Car => CreateCar(vehicle, hasOneLessWheelSuspension!.Value),
-                //    VehicleType.Motorcycle => CreateMotorcycle(vehicle, topBoxCapacity!.Value),
-                //    _ => throw new NotImplementedException(),
-                //};
+                garageManager.ParkVehicle(vehicle, vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
 
-                UI.AddMessage("Fordonet läggs till");
+
+                UI.AddMessage("Fordonet läggs till garaget");
 
             } while (true);
         }
-
 
         static void RemoveVehicle()
         {
             UI.Clear();
             UI.AddMessage("Ta bort fordon ur garaget");
-            throw new NotImplementedException();
+
+            UI.AddMessage("RegisterNumber?");
+            string? registerNumber = Console.ReadLine();
+            ArgumentNullException.ThrowIfNull(registerNumber);
+
+            var vehicle = garageManager.FindVehicle(registerNumber);
+            garageManager.UnparkVehicle(vehicle);
+
+            UI.AddMessage("Fordonet tas bort ur garaget");
+
+            UI.AddMessage("Något att gå tillbaka till huvudmeny");
+            Console.ReadKey();
         }
 
         static void FindVehicle()
         {
             UI.Clear();
             UI.AddMessage("Hitta ett specifikt fordon");
-            throw new NotImplementedException();
+
+            UI.AddMessage("RegisterNumber?");
+            string? registerNumber = Console.ReadLine();
+            ArgumentNullException.ThrowIfNull(registerNumber);
+
+            var vehicle = garageManager.FindVehicle(registerNumber);
+            UI.AddMessage(vehicle.Stats());
+
+
+            UI.AddMessage("Något att gå tillbaka till huvudmeny");
+            Console.ReadKey();
         }
 
         static void FilterVehicles()

@@ -8,5 +8,6 @@ public class Bus : Vehicle
                     string color,
                     uint numberOfWheels,
                     uint busType) : base(registerNumber, color, busType) => BusType = busType;
+    public override string Stats() => $"{base.Stats()}Buss typ:{BusType}";
 
 }

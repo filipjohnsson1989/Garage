@@ -41,29 +41,40 @@ public class GarageManager
 
         return result;
     }
-    public IVehicle CreateAirplane(dynamic vehicle,
+
+
+    private IVehicle CreateAirplane(dynamic vehicle,
                                    uint wingSpan) => new Airplane(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, wingSpan);
 
-    public IVehicle CreateBoat(dynamic vehicle,
+    private IVehicle CreateBoat(dynamic vehicle,
                                uint hullType) => new Boat(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, hullType);
 
-    public IVehicle CreateBus(dynamic vehicle,
+    private IVehicle CreateBus(dynamic vehicle,
                               uint busType) => new Bus(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, busType);
 
-    public IVehicle CreateCar(dynamic vehicle,
+    private IVehicle CreateCar(dynamic vehicle,
                               bool hasOneLessWheelSuspension) => new Car(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, hasOneLessWheelSuspension);
 
-    public IVehicle CreateMotorcycle(dynamic vehicle,
+    private IVehicle CreateMotorcycle(dynamic vehicle,
                                      uint topBoxCapacity) => new Motorcycle(vehicle.RegisterNumber, vehicle.Color, vehicle.NumberOfWheels, topBoxCapacity);
 
 
-    public void ParkVehicle(IVehicle vehicle)
+    public void ParkVehicle(dynamic vehicle, VehicleType vehicleType, uint? wingSpan, uint? hullType, uint? busType, bool? hasOneLessWheelSuspension, uint? topBoxCapacity)
     {
         ArgumentNullException.ThrowIfNull(garageHandler);
 
-        garageHandler.AddVehicle(vehicle);
-        //new Bus(registerNumber: new string(), color: "Red", numberOfWheels: 6, busType: 1)
-        //garageHandler.AddVehicle(new Bus(registerNumber: new string(), color: "Blue", numberOfWheels: 4, busType: 2));
+        IVehicle result = vehicleType switch
+        {
+            VehicleType.Airplain => CreateAirplane(vehicle, wingSpan!.Value),
+            VehicleType.Boat => CreateBoat(vehicle, hullType!.Value),
+            VehicleType.Bus => CreateBus(vehicle, busType!.Value),
+            VehicleType.Car => CreateCar(vehicle, hasOneLessWheelSuspension!.Value),
+            VehicleType.Motorcycle => CreateMotorcycle(vehicle, topBoxCapacity!.Value),
+            _ => throw new NotImplementedException(),
+        };
+
+
+        garageHandler.AddVehicle(result);
     }
 
 
@@ -78,5 +89,15 @@ public class GarageManager
         ArgumentNullException.ThrowIfNull(garageHandler);
 
         return garageHandler.GetVehicles();
+    }
+
+    public IVehicle FindVehicle(string registerNumber)
+    {
+        ArgumentNullException.ThrowIfNull(garageHandler);
+
+        var vehicle= garageHandler.GetVehicle(registerNumber);
+        ArgumentNullException.ThrowIfNull(vehicle);
+
+        return vehicle;
     }
 }
