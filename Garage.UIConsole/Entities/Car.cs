@@ -9,6 +9,6 @@ public class Car : Vehicle
                     uint numberOfWheels,
                     bool hasOneLessWheelSuspension) : base(registerNumber, color, numberOfWheels) => HasOneLessWheelSuspension = hasOneLessWheelSuspension;
 
-    public override string Stats() => $"{base.Stats()}Har en hjulupphängning mindre?{(HasOneLessWheelSuspension ? "Jag" : "Nej")}";
+    public override string Stats() => $"{base.Stats()}Har en hjulupphängning mindre?{(HasOneLessWheelSuspension ? "Ja" : "Nej")}";
 
 }
