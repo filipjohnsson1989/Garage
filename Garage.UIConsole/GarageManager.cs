@@ -72,15 +72,8 @@ public class GarageManager
     {
         consoleUI.Clear();
         consoleUI.AddMessage("Instansieringen av ett nytt garage");
-        consoleUI.AddMessage("Kapacitet?");
 
-
-        string? input = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(input);
-
-
-        if (string.IsNullOrEmpty(input) || !uint.TryParse(input, out uint capacity))
-            throw new ArgumentException();
+        uint capacity = ConsoleUI<uint>.AskForAnInput("Kapacitet?");
 
         garageHandler = new(capacity, vehicles);
 
@@ -89,7 +82,7 @@ public class GarageManager
         consoleUI.AddMessage($"Garaget har {remaindeCapacity} kapacitet kvar");
 
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
 
     }
 
@@ -115,7 +108,7 @@ public class GarageManager
             consoleUI.AddMessage(vehicle.Stats() + " \n\r");
         }
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
     }
 
     void ListOfVehicleTypes()
@@ -132,7 +125,7 @@ public class GarageManager
         }
 
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
     }
 
     void AddVehicle()
@@ -150,7 +143,7 @@ public class GarageManager
         consoleUI.AddMessage("Fordonet läggs till garaget");
 
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
     }
 
     IEnumerable<IVehicle> CreateVehicles()
@@ -204,24 +197,18 @@ public class GarageManager
 
         string? input = Console.ReadLine();
         ArgumentNullException.ThrowIfNull(input);
-
+        
         if (string.IsNullOrEmpty(input))
             return null;
 
         // ToDo: out of range VehicleType
         var vehicleType = (VehicleType)(int.Parse(input) - 1);
 
-        consoleUI.AddMessage("Registreringsnummer?");
-        string? registerNumber = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(registerNumber);
+        string registerNumber = ConsoleUI<string>.AskForAnInput("Registreringsnummer?");
 
-        consoleUI.AddMessage("Färg?");
-        string? color = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(color);
+        string color = ConsoleUI<string>.AskForAnInput("Färg?");
 
-        consoleUI.AddMessage("Antal hjul?");
-        string? numberOfWheels = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(numberOfWheels);
+        uint numberOfWheels = ConsoleUI<uint>.AskForAnInput("Antal hjul?");
 
 
         uint? wingSpan = null;
@@ -230,16 +217,16 @@ public class GarageManager
         bool? hasOneLessWheelSuspension = null;
         uint? topBoxCapacity = null;
         // ToDo: ArgumentException
-        if (vehicleType == VehicleType.Airplain) { consoleUI.AddMessage("ving spann?"); wingSpan = uint.Parse(Console.ReadLine()!); }
-        else if (vehicleType == VehicleType.Boat) { consoleUI.AddMessage("Skrov typ?"); hullType = uint.Parse(Console.ReadLine()!); }
-        else if (vehicleType == VehicleType.Bus) { consoleUI.AddMessage("Buss typ?"); busType = uint.Parse(Console.ReadLine()!); }
-        else if (vehicleType == VehicleType.Car) { consoleUI.AddMessage("Har en hjulupphängning mindre?"); hasOneLessWheelSuspension = bool.Parse(Console.ReadLine()!); }
-        else if (vehicleType == VehicleType.Motorcycle) { consoleUI.AddMessage("Toppboxens kapacitet?"); topBoxCapacity = uint.Parse(Console.ReadLine()!); }
+        if (vehicleType == VehicleType.Airplain)  wingSpan = ConsoleUI<uint>.AskForAnInput("Ving spann?");
+        else if (vehicleType == VehicleType.Boat) hullType = ConsoleUI<uint>.AskForAnInput("Skrov typ?");
+        else if (vehicleType == VehicleType.Bus) busType = ConsoleUI<uint>.AskForAnInput("Buss typ?");
+        else if (vehicleType == VehicleType.Car) hasOneLessWheelSuspension = ConsoleUI<bool>.AskForAnInput("Har en hjulupphängning mindre? Ja=j, Nej=n", "Ja=j, Nej=n");
+        else if (vehicleType == VehicleType.Motorcycle) topBoxCapacity = ConsoleUI<uint>.AskForAnInput("Toppboxens kapacitet?");
         else throw new NotImplementedException();
 
         // ToDo: fix converting
         (string registerNumber, string color, uint, VehicleType vehicleType, uint? wingSpan, uint? hullType, uint? busType, bool? hasOneLessWheelSuspension, uint? topBoxCapacity) result =
-            (registerNumber, color, uint.Parse(numberOfWheels), vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
+            (registerNumber, color, numberOfWheels, vehicleType, wingSpan, hullType, busType, hasOneLessWheelSuspension, topBoxCapacity);
 
         return result;
     }
@@ -251,9 +238,7 @@ public class GarageManager
         consoleUI.Clear();
         consoleUI.AddMessage("Ta bort fordon ur garaget");
 
-        consoleUI.AddMessage("RegisterNumber?");
-        string? registerNumber = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(registerNumber);
+        string registerNumber = ConsoleUI<string>.AskForAnInput("Registreringsnummer?");
 
         // ToDo: Could not find the vehicle
         var vehicle = garageHandler.GetVehicle(registerNumber);
@@ -264,7 +249,7 @@ public class GarageManager
         consoleUI.AddMessage("Fordonet tas bort ur garaget");
 
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
     }
 
     void FindVehicle()
@@ -274,9 +259,7 @@ public class GarageManager
         consoleUI.Clear();
         consoleUI.AddMessage("Hitta ett specifikt fordon");
 
-        consoleUI.AddMessage("RegisterNumber?");
-        string? registerNumber = Console.ReadLine();
-        ArgumentNullException.ThrowIfNull(registerNumber);
+        string registerNumber = ConsoleUI<string>.AskForAnInput("Registreringsnummer?");
 
         // ToDo: Could not find the vehicle
         var vehicle = garageHandler.GetVehicle(registerNumber);
@@ -284,7 +267,7 @@ public class GarageManager
 
         consoleUI.AddMessage(vehicle.Stats());
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
-        Console.ReadKey();
+        consoleUI.GetKey();
     }
 
     void FilterVehicles()
