@@ -194,13 +194,13 @@ public class GarageManager
 
     (string, string, uint, VehicleType, uint?, uint?, uint?, bool?, uint?)? AskForVehicle()
     {
-        consoleUI.AddMessage("Vilket fordon vill du läga till?"
+        consoleUI.AddMessage("Vilket typ av fordon?"
                     + "\n1.Airplain"
                     + "\n2.Boat"
                     + "\n3.Bus"
                     + "\n4.Car"
                     + "\n5.MotorCycle"
-                    + "\nTomt att gå tillbaka till huvudmeny");
+                    + "\nTomt att klara");
 
         string? input = Console.ReadLine();
         ArgumentNullException.ThrowIfNull(input);
