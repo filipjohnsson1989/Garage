@@ -98,7 +98,7 @@ public class GarageManager
         consoleUI.Clear();
         consoleUI.AddMessage("Instansieringen av ett nytt garage med ett antal fordon");
 
-        var vehicles = this.GetVehicles();
+        var vehicles = this.CreateVehicles();
         CreateGarage(vehicles);
     }
 
@@ -142,7 +142,7 @@ public class GarageManager
         consoleUI.Clear();
         consoleUI.AddMessage("Lägga till fordon");
 
-        var vehicle = this.GetVehicle();
+        var vehicle = this.CreateVehicle();
         ArgumentNullException.ThrowIfNull(vehicle);
 
         garageHandler.AddVehicle(vehicle);
@@ -153,12 +153,12 @@ public class GarageManager
         Console.ReadKey();
     }
 
-    IEnumerable<IVehicle> GetVehicles()
+    IEnumerable<IVehicle> CreateVehicles()
     {
         var result = new List<IVehicle>();
         do
         {
-            var vehicle = this.GetVehicle();
+            var vehicle = this.CreateVehicle();
 
             if (vehicle is null)
                 break;
@@ -171,7 +171,7 @@ public class GarageManager
         return result;
     }
 
-    IVehicle? GetVehicle()
+    IVehicle? CreateVehicle()
     {
         var vehicle = AskForVehicle();
 
