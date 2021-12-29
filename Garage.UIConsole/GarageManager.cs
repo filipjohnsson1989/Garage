@@ -112,7 +112,7 @@ public class GarageManager
         var vehicles = garageHandler.GetVehicles();
         foreach (var vehicle in vehicles)
         {
-            consoleUI.AddMessage(vehicle.Stats() + "\n\r");
+            consoleUI.AddMessage(vehicle.Stats() + " \n\r");
         }
         consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
         Console.ReadKey();
@@ -120,9 +120,19 @@ public class GarageManager
 
     void ListOfVehicleTypes()
     {
+        ArgumentNullException.ThrowIfNull(garageHandler);
+
         consoleUI.Clear();
         consoleUI.AddMessage("Lista fordonstyper och hur många av varje som står i garaget");
-        throw new NotImplementedException();
+
+        var vehicleGroups = garageHandler.GetVehicles().GroupBy(x => x.GetType().Name).Select(x => new { Type = x.Key, Count = x.Count() });
+        foreach (var vehicleGroup in vehicleGroups)
+        {
+            consoleUI.AddMessage($"Fordonstyp: {vehicleGroup.Type}, {vehicleGroup.Count} st\n\r");
+        }
+
+        consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
+        Console.ReadKey();
     }
 
     void AddVehicle()
