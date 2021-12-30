@@ -9,4 +9,6 @@ public class Motorcycle : Vehicle
                     uint numberOfWheels,
                     uint topBoxCapacity) : base(registerNumber, color, topBoxCapacity) => TopBoxCapacity = topBoxCapacity;
     public override string Stats() => $"{base.Stats()}Toppboxens kapacitet:{TopBoxCapacity}";
+    public override bool Matches(ref string keyword) => base.Matches(ref keyword) || TopBoxCapacity.ToString() == keyword;
+
 }

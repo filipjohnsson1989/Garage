@@ -9,5 +9,6 @@ public class Bus : Vehicle
                     uint numberOfWheels,
                     uint busType) : base(registerNumber, color, busType) => BusType = busType;
     public override string Stats() => $"{base.Stats()}Buss typ:{BusType}";
+    public override bool Matches(ref string keyword) => base.Matches(ref keyword) || BusType.ToString() == keyword;
 
 }

@@ -7,5 +7,6 @@
         string RegisterNumber { get; init; }
 
         string Stats();
+        bool Matches(ref string keyword);
     }
 }

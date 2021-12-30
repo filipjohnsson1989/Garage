@@ -197,7 +197,7 @@ public class GarageManager
 
         string? input = Console.ReadLine();
         ArgumentNullException.ThrowIfNull(input);
-        
+
         if (string.IsNullOrEmpty(input))
             return null;
 
@@ -217,7 +217,7 @@ public class GarageManager
         bool? hasOneLessWheelSuspension = null;
         uint? topBoxCapacity = null;
         // ToDo: ArgumentException
-        if (vehicleType == VehicleType.Airplain)  wingSpan = ConsoleUI<uint>.AskForAnInput("Ving spann?");
+        if (vehicleType == VehicleType.Airplain) wingSpan = ConsoleUI<uint>.AskForAnInput("Ving spann?");
         else if (vehicleType == VehicleType.Boat) hullType = ConsoleUI<uint>.AskForAnInput("Skrov typ?");
         else if (vehicleType == VehicleType.Bus) busType = ConsoleUI<uint>.AskForAnInput("Buss typ?");
         else if (vehicleType == VehicleType.Car) hasOneLessWheelSuspension = ConsoleUI<bool>.AskForAnInput("Har en hjulupphängning mindre? Ja=j, Nej=n", "Ja=j, Nej=n");
@@ -241,7 +241,7 @@ public class GarageManager
         string registerNumber = ConsoleUI<string>.AskForAnInput("Registreringsnummer?");
 
         // ToDo: Could not find the vehicle
-        var vehicle = garageHandler.GetVehicle(registerNumber);
+        var vehicle = garageHandler.GetVehicleByRegisterNumber(registerNumber);
         ArgumentNullException.ThrowIfNull(vehicle);
 
         garageHandler.RemoveVehicle(vehicle);
@@ -262,7 +262,7 @@ public class GarageManager
         string registerNumber = ConsoleUI<string>.AskForAnInput("Registreringsnummer?");
 
         // ToDo: Could not find the vehicle
-        var vehicle = garageHandler.GetVehicle(registerNumber);
+        var vehicle = garageHandler.GetVehicleByRegisterNumber(registerNumber);
         ArgumentNullException.ThrowIfNull(vehicle);
 
         consoleUI.AddMessage(vehicle.Stats());
@@ -272,9 +272,21 @@ public class GarageManager
 
     void FilterVehicles()
     {
+        ArgumentNullException.ThrowIfNull(garageHandler);
+
         consoleUI.Clear();
         consoleUI.AddMessage("Filtrera fordon");
-        throw new NotImplementedException();
+
+        string keyword = ConsoleUI<string>.AskForAnInput("Sökord?");
+
+        // ToDo: Could not find the vehicle
+        var vehicles = garageHandler.FilterVehiclesByKeyword(keyword);
+
+
+        vehicles.ToList<IVehicle>().ForEach(x => consoleUI.AddMessage(x.Stats() + "\n\r"));
+
+        consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
+        consoleUI.GetKey();
     }
 
     void ClosePrograme()

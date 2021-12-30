@@ -10,4 +10,5 @@ public class Boat : Vehicle
                     uint hullType) : base(registerNumber, color, hullType) => HullType = hullType;
 
     public override string Stats() => $"{base.Stats()}Skrov typ:{HullType}";
+    public override bool Matches(ref string keyword) => base.Matches(ref keyword) || HullType.ToString() == keyword;
 }

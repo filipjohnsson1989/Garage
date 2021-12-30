@@ -83,7 +83,9 @@ public class GarageHandler
 
     public IEnumerable<IVehicle> GetVehicles() => garage.Where(x => x is not null);
 
-    public IVehicle? GetVehicle(string registerNumber) => garage.FirstOrDefault(x => x is not null && x.RegisterNumber == registerNumber!);
+    public IVehicle? GetVehicleByRegisterNumber(string registerNumber) => garage.FirstOrDefault(x => x is not null && x.RegisterNumber == registerNumber!);
+    public IEnumerable<IVehicle> FilterVehiclesByKeyword(string keyword) => garage.Where(x => x is not null && x.Matches(ref keyword));
+
 
 
 

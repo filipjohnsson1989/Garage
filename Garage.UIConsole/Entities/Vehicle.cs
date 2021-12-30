@@ -14,4 +14,9 @@ public abstract class Vehicle : IVehicle
     }
 
     public virtual string Stats() => $"Vehicle:{GetType().Name}\n\rRegistreringsnummer:{RegisterNumber}\n\rFärg:{Color}\n\rAntal hjul:{NumberOfWheels}\n\r";
+        public virtual bool Matches(ref string keyword)
+    {
+        keyword = keyword.Trim().ToLower();
+        return RegisterNumber == keyword || Color == keyword || NumberOfWheels.ToString() == keyword;
+    }
 }
