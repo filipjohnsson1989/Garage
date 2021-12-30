@@ -56,4 +56,4 @@ public class Garage<T> : IGarage<T>
             yield return vehicle;
     }
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}}
+}
