@@ -138,9 +138,8 @@ public class GarageManager
         var vehicle = this.CreateVehicle();
         if (vehicle is not null)
         {
-            garageHandler.AddVehicle(vehicle);
-
-            consoleUI.AddMessage("Fordonet läggs till garaget");
+            if (garageHandler.AddVehicle(vehicle))
+                consoleUI.AddMessage("Fordonet läggs till garaget");
 
             consoleUI.AddMessage("Något att gå tillbaka till huvudmeny");
             consoleUI.GetKey();
