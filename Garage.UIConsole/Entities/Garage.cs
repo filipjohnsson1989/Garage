@@ -24,8 +24,18 @@ public class Garage<T> : IGarage<T>
         ArgumentNullException.ThrowIfNull(item);
 
         if (IsFull) return false;
-        vehicles[NumberOfVehicles++] = item;
-        return true;
+        for (int i = 0; i < vehicles.Length; i++)
+        {
+            if (vehicles[i] is null)
+            {
+                vehicles[i] = item;
+                NumberOfVehicles++;
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     public bool Remove(T item)
@@ -46,4 +56,4 @@ public class Garage<T> : IGarage<T>
             yield return vehicle;
     }
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
+}}
